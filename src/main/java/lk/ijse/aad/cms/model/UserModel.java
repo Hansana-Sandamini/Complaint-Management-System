@@ -2,6 +2,8 @@ package lk.ijse.aad.cms.model;
 
 import jakarta.annotation.Resource;
 import lk.ijse.aad.cms.dto.UserDTO;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -12,6 +14,8 @@ import java.util.ArrayList;
 
 public class UserModel {
 
+    @Getter
+    @Setter
     @Resource(name = "java:comp/env/jdbc/pool")
     private DataSource dataSource;
 
@@ -25,7 +29,7 @@ public class UserModel {
 
             while (rst.next()) {
                 users.add(new UserDTO(
-                        rst.getString("id"),
+                        rst.getInt("id"),
                         rst.getString("email"),
                         rst.getString("password"),
                         rst.getString("name"),
@@ -67,19 +71,19 @@ public class UserModel {
             pstm.setString(4, userDTO.getRole());
             pstm.setString(5, userDTO.getMobile());
             pstm.setString(6, userDTO.getImage());
-            pstm.setString(7, userDTO.getId());
+            pstm.setInt(7, userDTO.getId());
 
             return pstm.executeUpdate() > 0;
         }
     }
 
-    public boolean deleteUser(String userId) throws SQLException {
+    public boolean deleteUser(int userId) throws SQLException {
         String sql = "DELETE FROM user WHERE id = ?";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement pstm = connection.prepareStatement(sql)) {
 
-            pstm.setString(1, userId);
+            pstm.setInt(1, userId);
             return pstm.executeUpdate() > 0;
         }
     }
@@ -96,7 +100,7 @@ public class UserModel {
             try (ResultSet rst = pstm.executeQuery()) {
                 if (rst.next()) {
                     return new UserDTO(
-                            rst.getString("id"),
+                            rst.getInt("id"),
                             rst.getString("email"),
                             rst.getString("password"),
                             rst.getString("name"),

@@ -79,7 +79,11 @@
                     </button>
 
                     <div class="text-center">
-                        <p class="text-muted">Already have an account? <a href="#" style="color: #764ba2; text-decoration: none; font-weight: bold">Sign In</a></p>
+                        <p class="text-muted">Already have an account?
+                            <a href="${pageContext.request.contextPath}/pages/signin.jsp"
+                               style="color: #764ba2; text-decoration: none; font-weight: bold">Sign In
+                            </a>
+                        </p>
                     </div>
                 </form>
             </div>

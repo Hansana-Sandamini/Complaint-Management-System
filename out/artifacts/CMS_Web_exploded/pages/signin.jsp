@@ -29,7 +29,7 @@
                     <p class="text-muted">Sign in to continue to your account</p>
                 </div>
 
-                <form id="sign-in-form">
+                <form id="sign-in-form" action="{pageContext.request.contextPath}/signup" method="POST" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="loginEmail" class="form-label fw-medium">Email Address</label>
                         <input type="email" class="form-control" id="loginEmail" name="email" placeholder="example@gmail.com" required>

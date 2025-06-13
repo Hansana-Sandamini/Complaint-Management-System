@@ -18,26 +18,12 @@
           crossorigin="anonymous"
     />
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/complaint.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
-<!-- Top Bar -->
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container">
-        <a class="navbar-brand fw-bold fs-3" href="${pageContext.request.contextPath}/index.jsp">CMS</a>
-        <div class="d-flex">
-            <a href="${pageContext.request.contextPath}/pages/employee-dashboard.jsp"
-               class="btn btn-custom text-white" style="margin-right: 10px">Dashboard</a>
-            <form action="${pageContext.request.contextPath}/index.jsp" method="post">
-                <button type="submit" class="btn btn-custom text-white">Logout</button>
-            </form>
-        </div>
-    </div>
-</nav>
-
 <!-- Complaint Form -->
 <div class="form-container">
     <div class="complaint-container">
-        <h2 class="text-center mb-4">Submit New Complaint</h2>
 
         <form id="complaint-form" action="${pageContext.request.contextPath}/submit-complaint" method="POST" enctype="multipart/form-data">
             <div class="mb-3">

@@ -19,29 +19,13 @@ body::before {
 }
 
 .complaint-container {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(238, 238, 238, 0.9);
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 2rem;
     width: 100%;
     max-width: 800px;
     margin: auto;
-}
-
-.navbar {
-    background-color: rgba(0, 0, 0, 0.7) !important;
-}
-
-.btn-custom {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    transition: all 0.3s;
-}
-
-.btn-custom:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
 .form-container {

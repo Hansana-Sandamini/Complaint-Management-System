@@ -30,6 +30,7 @@
                     <p class="text-muted">Join us today and get started</p>
                 </div>
 
+                <!-- Sign Up Form -->
                 <form id="sign-up-form" action="${pageContext.request.contextPath}/signup" method="POST" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -96,6 +97,63 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous">
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // Password confirmation validation
+        document.getElementById('sign-up-form').addEventListener('submit', function (e) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Password Mismatch',
+                    text: 'Passwords do not match!',
+                    confirmButtonColor: '#764ba2',
+                }).then(() => {
+                    document.getElementById('sign-up-form').reset();
+                });
+            }
+        });
+
+        // Handle success/error messages
+        const successMessage = '<%= session.getAttribute("successMessage") != null ? session.getAttribute("successMessage") : "" %>';
+        const errorMessage = '<%= session.getAttribute("errorMessage") != null ? session.getAttribute("errorMessage") : "" %>';
+
+        if (successMessage) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: successMessage,
+                confirmButtonColor: '#764ba2',
+            }).then(() => {
+                window.location.href = '${pageContext.request.contextPath}/pages/signin.jsp';
+            });
+        }
+
+        if (errorMessage) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: errorMessage,
+                confirmButtonColor: '#764ba2',
+            }).then(() => {
+                window.location.href = '${pageContext.request.contextPath}/pages/signup.jsp';
+            });
+        }
+    });
+</script>
+
+<%
+    // Clear session messages after they are used in JavaScript
+    session.removeAttribute("successMessage");
+    session.removeAttribute("errorMessage");
+%>
 
 </body>
 </html>

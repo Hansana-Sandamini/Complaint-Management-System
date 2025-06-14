@@ -25,7 +25,7 @@
 <div class="form-container">
     <div class="complaint-container">
 
-        <form id="complaint-form" action="${pageContext.request.contextPath}/submit-complaint" method="POST" enctype="multipart/form-data">
+        <form id="complaint-form" action="${pageContext.request.contextPath}/submit-complaint" method="POST">
             <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
                 <input type="text" class="form-control" id="title" name="title" required>
@@ -47,6 +47,65 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous">
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        <%--// Check for success message--%>
+        <%--<% if (request.getAttribute("successMessage") != null) { %>--%>
+        <%--Swal.fire({--%>
+        <%--    icon: 'success',--%>
+        <%--    title: 'Success!',--%>
+        <%--    text: '<%= request.getAttribute("successMessage") %>',--%>
+        <%--    confirmButtonColor: '#764ba2'--%>
+        <%--}).then(() => {--%>
+        <%--    window.location.href = '${pageContext.request.contextPath}/pages/employee-dashboard.jsp';--%>
+        <%--});--%>
+        <%--<% } %>--%>
+
+        <%--// Check for error message--%>
+        <%--<% if (request.getAttribute("errorMessage") != null) { %>--%>
+        <%--Swal.fire({--%>
+        <%--    icon: 'error',--%>
+        <%--    title: 'Error!',--%>
+        <%--    text: '<%= request.getAttribute("errorMessage") %>',--%>
+        <%--    confirmButtonColor: '#764ba2'--%>
+        <%--});--%>
+        <%--<% } %>--%>
+
+        // Handle success/error messages
+        const successMessage = '<%= session.getAttribute("successMessage") != null ? session.getAttribute("successMessage") : "" %>';
+        const errorMessage = '<%= session.getAttribute("errorMessage") != null ? session.getAttribute("errorMessage") : "" %>';
+
+        if (successMessage) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: successMessage,
+                confirmButtonColor: '#764ba2',
+            }).then(() => {
+                window.location.href = '${pageContext.request.contextPath}/pages/employee-dashboard.jsp';
+            });
+        }
+
+        if (errorMessage) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: errorMessage,
+                confirmButtonColor: '#764ba2',
+            }).then(() => {
+                window.location.href = '${pageContext.request.contextPath}/pages/employee-dashboard.jsp';
+            });
+        }
+    });
+</script>
+
+<%
+    // Clear session messages after they are used in JavaScript
+    session.removeAttribute("successMessage");
+    session.removeAttribute("errorMessage");
+%>
 
 </body>
 </html>

@@ -150,7 +150,7 @@
 </script>
 
 <%
-    // Clear session messages AFTER they are used in JavaScript
+    // Clear session messages after they are used in JavaScript
     session.removeAttribute("successMessage");
     session.removeAttribute("errorMessage");
 %>

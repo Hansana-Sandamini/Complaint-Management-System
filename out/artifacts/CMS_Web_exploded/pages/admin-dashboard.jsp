@@ -103,12 +103,14 @@
                             <td><%= complaintDTO.getRemarks() != null ? complaintDTO.getRemarks() : "N/A" %></td>
                             <td><%= complaintDTO.getUpdatedAt() %></td>
                             <td>
+                                <% if ("PENDING".equals(complaintDTO.getStatus())) { %>
                                 <button class="btn btn-sm btn-secondary update-btn"
                                         data-complaint-id="<%= complaintDTO.getId() %>"
                                         data-bs-toggle="modal"
                                         data-bs-target="#updateComplaintModal">Update</button>
                                 <button class="btn btn-sm btn-danger delete-btn"
                                         data-complaint-id="<%= complaintDTO.getId() %>">Delete</button>
+                                <% } %>
                             </td>
                         </tr>
                         <%

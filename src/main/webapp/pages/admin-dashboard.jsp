@@ -167,21 +167,21 @@
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<%--<script>--%>
-<%--    document.addEventListener('DOMContentLoaded', function () {--%>
-<%--        // Get all update buttons--%>
-<%--        const updateButtons = document.querySelectorAll('.update-btn');--%>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get all update buttons
+        const updateButtons = document.querySelectorAll('.update-btn');
 
-<%--        updateButtons.forEach(button => {--%>
-<%--            button.addEventListener('click', function () {--%>
-<%--                // Get the complaint ID from the data attribute--%>
-<%--                const complaintId = this.getAttribute('data-complaint-id');--%>
-<%--                // Set the complaint ID in the modal's hidden input field--%>
-<%--                document.getElementById('update-complaint-id').value = complaintId;--%>
-<%--            });--%>
-<%--        });--%>
-<%--    });--%>
-<%--</script>--%>
+        updateButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                // Get the complaint ID from the data attribute
+                const complaintId = this.getAttribute('data-complaint-id');
+                // Set the complaint ID in the modal's hidden input field
+                document.getElementById('update-complaint-id').value = complaintId;
+            });
+        });
+    });
+</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

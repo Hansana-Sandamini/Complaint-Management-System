@@ -80,48 +80,6 @@
             </div>
             <div class="modal-body">
                 <div class="table-responsive">
-<%--                    <table class="table complaint-table">--%>
-<%--                        <thead>--%>
-<%--                        <tr>--%>
-<%--                            <th>ID</th>--%>
-<%--                            <th>Title</th>--%>
-<%--                            <th>Description</th>--%>
-<%--                            <th>Date Submitted</th>--%>
-<%--                            <th>Status</th>--%>
-<%--                            <th>Remarks</th>--%>
-<%--                            <th>Date Updated</th>--%>
-<%--                            <th>Actions</th>--%>
-<%--                        </tr>--%>
-<%--                        </thead>--%>
-<%--                        <tbody>--%>
-<%--                        <c:forEach items="${complaints}" var="complaint">--%>
-<%--                            <tr>--%>
-<%--                                <td>${complaint.id}</td>--%>
-<%--                                <td>${complaint.title}</td>--%>
-<%--                                <td>${complaint.description}</td>--%>
-<%--                                <td>${complaint.createdAt}</td>--%>
-<%--                                <td>--%>
-<%--                                    <span class="status-badge ${complaint.status == 'PENDING' ? 'status-pending' : 'status-resolved'}">--%>
-<%--                                            ${complaint.status}--%>
-<%--                                    </span>--%>
-<%--                                </td>--%>
-<%--                                <td>${complaint.remarks}</td>--%>
-<%--                                <td>${complaint.updatedAt}</td>--%>
-<%--                                <td>--%>
-<%--                                    <c:if test="${complaint.status == 'PENDING'}">--%>
-<%--                                        <button class="btn btn-sm btn-outline-secondary edit-btn"--%>
-<%--                                                data-complaint-id="${complaint.id}"--%>
-<%--                                                data-bs-toggle="modal"--%>
-<%--                                                data-bs-target="#editComplaintModal">Edit</button>--%>
-<%--                                        <button class="btn btn-sm btn-outline-danger delete-btn"--%>
-<%--                                                data-complaint-id="${complaint.id}">Delete</button>--%>
-<%--                                    </c:if>--%>
-<%--                                </td>--%>
-<%--                            </tr>--%>
-<%--                        </c:forEach>--%>
-<%--                        </tbody>--%>
-<%--                    </table>--%>
-
                     <table class="table complaint-table">
                         <thead>
                         <tr>

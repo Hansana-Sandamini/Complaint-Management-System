@@ -56,7 +56,7 @@ public class UpdateComplaintStatusServlet extends HttpServlet {
 
         } catch (SQLException e) {
             request.setAttribute("errorMessage", "Database error: " + e.getMessage());
-            request.getRequestDispatcher("/pages/error.jsp").forward(request, response);
+            e.printStackTrace();
         }
     }
 

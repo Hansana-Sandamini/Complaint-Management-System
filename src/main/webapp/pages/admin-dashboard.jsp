@@ -107,8 +107,12 @@
                                         data-complaint-id="<%= complaintDTO.getId() %>"
                                         data-bs-toggle="modal"
                                         data-bs-target="#updateComplaintModal">Update</button>
-                                <button class="btn btn-sm btn-danger delete-btn"
-                                        data-complaint-id="<%= complaintDTO.getId() %>">Delete</button>
+
+                                <form action="${pageContext.request.contextPath}/delete-complaint" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="<%= complaintDTO.getId() %>">
+                                    <button type="submit" class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Are you sure you want to delete this complaint?');">Delete</button>
+                                </form>
                             </td>
                         </tr>
                         <%

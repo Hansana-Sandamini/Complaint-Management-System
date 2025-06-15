@@ -6,6 +6,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="lk.ijse.aad.cms.dto.ComplaintDTO" %>
+<%@ page import="java.util.ArrayList" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,6 +80,48 @@
             </div>
             <div class="modal-body">
                 <div class="table-responsive">
+<%--                    <table class="table complaint-table">--%>
+<%--                        <thead>--%>
+<%--                        <tr>--%>
+<%--                            <th>ID</th>--%>
+<%--                            <th>Title</th>--%>
+<%--                            <th>Description</th>--%>
+<%--                            <th>Date Submitted</th>--%>
+<%--                            <th>Status</th>--%>
+<%--                            <th>Remarks</th>--%>
+<%--                            <th>Date Updated</th>--%>
+<%--                            <th>Actions</th>--%>
+<%--                        </tr>--%>
+<%--                        </thead>--%>
+<%--                        <tbody>--%>
+<%--                        <c:forEach items="${complaints}" var="complaint">--%>
+<%--                            <tr>--%>
+<%--                                <td>${complaint.id}</td>--%>
+<%--                                <td>${complaint.title}</td>--%>
+<%--                                <td>${complaint.description}</td>--%>
+<%--                                <td>${complaint.createdAt}</td>--%>
+<%--                                <td>--%>
+<%--                                    <span class="status-badge ${complaint.status == 'PENDING' ? 'status-pending' : 'status-resolved'}">--%>
+<%--                                            ${complaint.status}--%>
+<%--                                    </span>--%>
+<%--                                </td>--%>
+<%--                                <td>${complaint.remarks}</td>--%>
+<%--                                <td>${complaint.updatedAt}</td>--%>
+<%--                                <td>--%>
+<%--                                    <c:if test="${complaint.status == 'PENDING'}">--%>
+<%--                                        <button class="btn btn-sm btn-outline-secondary edit-btn"--%>
+<%--                                                data-complaint-id="${complaint.id}"--%>
+<%--                                                data-bs-toggle="modal"--%>
+<%--                                                data-bs-target="#editComplaintModal">Edit</button>--%>
+<%--                                        <button class="btn btn-sm btn-outline-danger delete-btn"--%>
+<%--                                                data-complaint-id="${complaint.id}">Delete</button>--%>
+<%--                                    </c:if>--%>
+<%--                                </td>--%>
+<%--                            </tr>--%>
+<%--                        </c:forEach>--%>
+<%--                        </tbody>--%>
+<%--                    </table>--%>
+
                     <table class="table complaint-table">
                         <thead>
                         <tr>
@@ -92,31 +136,46 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <c:forEach items="${complaints}" var="complaint">
-                            <tr>
-                                <td>${complaint.id}</td>
-                                <td>${complaint.title}</td>
-                                <td>${complaint.description}</td>
-                                <td>${complaint.createdAt}</td>
-                                <td>
-                                    <span class="status-badge ${complaint.status == 'PENDING' ? 'status-pending' : 'status-resolved'}">
-                                            ${complaint.status}
-                                    </span>
-                                </td>
-                                <td>${complaint.remarks}</td>
-                                <td>${complaint.updatedAt}</td>
-                                <td>
-                                    <c:if test="${complaint.status == 'PENDING'}">
-                                        <button class="btn btn-sm btn-outline-secondary edit-btn"
-                                                data-complaint-id="${complaint.id}"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#editComplaintModal">Edit</button>
-                                        <button class="btn btn-sm btn-outline-danger delete-btn"
-                                                data-complaint-id="${complaint.id}">Delete</button>
-                                    </c:if>
-                                </td>
-                            </tr>
-                        </c:forEach>
+                        <%
+                            ArrayList<ComplaintDTO> complaintDTOS = (ArrayList<ComplaintDTO>) request.getAttribute("allComplaints");
+                            if (complaintDTOS == null || complaintDTOS.isEmpty()) {
+                        %>
+                        <tr>
+                            <td colspan="8" class="text-center text-white">No complaints found.</td>
+                        </tr>
+                        <%
+                        } else {
+                            for (ComplaintDTO complaintDTO : complaintDTOS) {
+                        %>
+                        <tr>
+                            <td><%= complaintDTO.getId() %></td>
+                            <td><%= complaintDTO.getTitle() %></td>
+                            <td><%= complaintDTO.getDescription() %></td>
+                            <td><%= complaintDTO.getCreatedAt() %></td>
+                            <td>
+                                <span class="status-badge <%= complaintDTO.getStatus().toLowerCase().replace("_", "-") %>">
+                                    <%= complaintDTO.getStatus() %>
+                                </span>
+                            </td>
+                            <td><%= complaintDTO.getRemarks() != null ? complaintDTO.getRemarks() : "N/A" %></td>
+                            <td><%= complaintDTO.getUpdatedAt() %></td>
+                            <td>
+                                <% if ("PENDING".equals(complaintDTO.getStatus())) { %>
+                                <button class="btn btn-sm btn-secondary edit-btn"
+                                        data-complaint-id="<%= complaintDTO.getId() %>"
+                                        data-complaint-title="<%= complaintDTO.getTitle() %>"
+                                        data-complaint-description="<%= complaintDTO.getDescription() %>"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editComplaintModal">Edit</button>
+                                <button class="btn btn-sm btn-danger delete-btn"
+                                        data-complaint-id="<%= complaintDTO.getId() %>">Delete</button>
+                                <% } %>
+                            </td>
+                        </tr>
+                        <%
+                                }
+                            }
+                        %>
                         </tbody>
                     </table>
                 </div>
@@ -164,6 +223,45 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous">
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const successMessage = '<%= session.getAttribute("successMessage") != null ? session.getAttribute("successMessage") : "" %>';
+        const errorMessage = '<%= session.getAttribute("errorMessage") != null ? session.getAttribute("errorMessage") : "" %>';
+
+        // Only show SweetAlert and redirect if the page was loaded from a form submission
+        if (successMessage && window.location.search.includes('fromSubmission=true')) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: successMessage,
+                confirmButtonColor: '#764ba2',
+            }).then(() => {
+                // Redirect to clean URL to avoid re-triggering
+                window.location.href = '${pageContext.request.contextPath}/complaint';
+            });
+        }
+
+        if (errorMessage && window.location.search.includes('fromSubmission=true')) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: errorMessage,
+                confirmButtonColor: '#764ba2',
+            }).then(() => {
+                // Redirect to clean URL to avoid re-triggering
+                window.location.href = '${pageContext.request.contextPath}/complaint';
+            });
+        }
+    });
+</script>
+
+<%
+    // Clear session messages after they are used
+    session.removeAttribute("successMessage");
+    session.removeAttribute("errorMessage");
+%>
 
 </body>
 </html>

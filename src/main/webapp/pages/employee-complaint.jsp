@@ -55,7 +55,7 @@
         const successMessage = '<%= session.getAttribute("successMessage") != null ? session.getAttribute("successMessage") : "" %>';
         const errorMessage = '<%= session.getAttribute("errorMessage") != null ? session.getAttribute("errorMessage") : "" %>';
 
-        if (successMessage) {
+        if (successMessage && window.location.search.includes('fromSubmission=true')) {
             Swal.fire({
                 icon: 'success',
                 title: 'Success',
@@ -66,7 +66,7 @@
             });
         }
 
-        if (errorMessage) {
+        if (errorMessage && window.location.search.includes('fromSubmission=true')) {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',

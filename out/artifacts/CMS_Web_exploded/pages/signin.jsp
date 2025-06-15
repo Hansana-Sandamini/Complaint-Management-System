@@ -72,34 +72,63 @@
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<%--<script>--%>
+<%--    document.addEventListener('DOMContentLoaded', function () {--%>
+<%--        // Check for success or error messages in session--%>
+<%--        <c:if test="${not empty errorMessage}">--%>
+<%--        console.log('Error message found: ${errorMessage}');--%>
+<%--        Swal.fire({--%>
+<%--            icon: 'error',--%>
+<%--            title: 'Error',--%>
+<%--            text: '${errorMessage}',--%>
+<%--            confirmButtonText: 'OK',--%>
+<%--            confirmButtonColor: '#764ba2'--%>
+<%--        });--%>
+<%--        <% session.removeAttribute("errorMessage"); %>--%>
+<%--        </c:if>--%>
+
+<%--        <c:if test="${not empty successMessage}">--%>
+<%--        console.log('Success message found: ${successMessage}');--%>
+<%--        Swal.fire({--%>
+<%--            icon: 'success',--%>
+<%--            title: 'Success',--%>
+<%--            text: '${successMessage}',--%>
+<%--            showConfirmButton: false,--%>
+<%--            timer: 1500--%>
+<%--        });--%>
+<%--        <% session.removeAttribute("successMessage"); %>--%>
+<%--        </c:if>--%>
+<%--    });--%>
+<%--</script>--%>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Check for success or error messages in session
+        // Debugging logs
+        console.log("Success message:", '<%= session.getAttribute("successMessage") %>');
+        console.log("Error message:", '<%= session.getAttribute("errorMessage") %>');
+
         <c:if test="${not empty errorMessage}">
-        console.log('Error message found: ${errorMessage}');
         Swal.fire({
             icon: 'error',
             title: 'Error',
             text: '${errorMessage}',
-            confirmButtonText: 'OK',
             confirmButtonColor: '#764ba2'
         });
         <% session.removeAttribute("errorMessage"); %>
         </c:if>
 
         <c:if test="${not empty successMessage}">
-        console.log('Success message found: ${successMessage}');
         Swal.fire({
             icon: 'success',
             title: 'Success',
             text: '${successMessage}',
-            showConfirmButton: false,
-            timer: 1500
+            confirmButtonColor: '#764ba2'
         });
         <% session.removeAttribute("successMessage"); %>
         </c:if>
     });
 </script>
+
 
 </body>
 </html>

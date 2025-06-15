@@ -14,6 +14,7 @@ import lk.ijse.aad.cms.model.ComplaintModel;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 @WebServlet("/submit-complaint")
 public class SubmitComplaintServlet extends HttpServlet {
@@ -26,8 +27,8 @@ public class SubmitComplaintServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         UserDTO user = (UserDTO) session.getAttribute("user");
 
-        // Check if user is logged in and is an employee
-        if (user == null || !"EMPLOYEE".equals(user.getRole())) {
+        if (user == null) {
+            session.setAttribute("errorMessage", "Please sign in to submit a complaint...");
             response.sendRedirect(request.getContextPath() + "/pages/signin.jsp");
             return;
         }
@@ -39,19 +40,27 @@ public class SubmitComplaintServlet extends HttpServlet {
         complaintModel.setDataSource(dataSource);
 
         try {
-            ComplaintDTO complaint = new ComplaintDTO(0, title, description, "PENDING", null, user.getId(), null, null, null);
+            // Save the new complaint
+            ComplaintDTO complaint = new ComplaintDTO();
+            complaint.setTitle(title);
+            complaint.setDescription(description);
+            complaint.setUserId(user.getId());
+            complaint.setStatus("PENDING");
+            complaintModel.saveComplaint(complaint);
 
-            if (complaintModel.saveComplaint(complaint)) {
-                request.getSession().setAttribute("successMessage", "Complaint submitted successfully...!");
-                request.getRequestDispatcher("/pages/employee-dashboard.jsp").forward(request, response);
-            } else {
-                request.setAttribute("errorMessage", "Failed to submit complaint. Please try again...");
-                request.getRequestDispatcher("/pages/employee-complaint.jsp").forward(request, response);
-            }
+            // Fetch updated complaints for the user
+            ArrayList<ComplaintDTO> complaints = complaintModel.getComplaintsByUserId(user.getId());
+            request.setAttribute("allComplaints", complaints);
+
+            // Set success message
+            session.setAttribute("successMessage", "Complaint submitted successfully...!");
+
+            // Forward to employee dashboard
+            request.getRequestDispatcher("/pages/employee-dashboard.jsp").forward(request, response);
 
         } catch (SQLException e) {
-            request.setAttribute("errorMessage", "Database error: " + e.getMessage());
-            request.getRequestDispatcher("/pages/employee-complaint.jsp").forward(request, response);
+            session.setAttribute("errorMessage", "Database error: " + e.getMessage());
+            response.sendRedirect(request.getContextPath() + "/pages/employee-complaint.jsp");
         }
     }
 

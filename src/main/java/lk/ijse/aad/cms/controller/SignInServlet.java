@@ -40,9 +40,11 @@ public class SignInServlet extends HttpServlet {
 
                 // Redirect based on role
                 if ("ADMIN".equals(user.getRole())) {
-                    response.sendRedirect(request.getContextPath() + "/pages/admin-dashboard.jsp");
-                } else {
-                    response.sendRedirect(request.getContextPath() + "/pages/employee-dashboard.jsp");
+                    response.sendRedirect(request.getContextPath() + "/complaint"); // forward to admin logic
+//                    response.sendRedirect(request.getContextPath() + "/pages/admin-dashboard.jsp");
+                } else if ("EMPLOYEE".equals(user.getRole())){
+                    response.sendRedirect(request.getContextPath() + "/complaint"); // forward to admin logic
+//                    response.sendRedirect(request.getContextPath() + "/pages/employee-dashboard.jsp");
                 }
             } else {
                 // Set error message

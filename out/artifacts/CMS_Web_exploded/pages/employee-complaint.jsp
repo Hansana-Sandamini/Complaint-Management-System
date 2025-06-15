@@ -51,33 +51,11 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        <%--// Check for success message--%>
-        <%--<% if (request.getAttribute("successMessage") != null) { %>--%>
-        <%--Swal.fire({--%>
-        <%--    icon: 'success',--%>
-        <%--    title: 'Success!',--%>
-        <%--    text: '<%= request.getAttribute("successMessage") %>',--%>
-        <%--    confirmButtonColor: '#764ba2'--%>
-        <%--}).then(() => {--%>
-        <%--    window.location.href = '${pageContext.request.contextPath}/pages/employee-dashboard.jsp';--%>
-        <%--});--%>
-        <%--<% } %>--%>
-
-        <%--// Check for error message--%>
-        <%--<% if (request.getAttribute("errorMessage") != null) { %>--%>
-        <%--Swal.fire({--%>
-        <%--    icon: 'error',--%>
-        <%--    title: 'Error!',--%>
-        <%--    text: '<%= request.getAttribute("errorMessage") %>',--%>
-        <%--    confirmButtonColor: '#764ba2'--%>
-        <%--});--%>
-        <%--<% } %>--%>
-
         // Handle success/error messages
         const successMessage = '<%= session.getAttribute("successMessage") != null ? session.getAttribute("successMessage") : "" %>';
         const errorMessage = '<%= session.getAttribute("errorMessage") != null ? session.getAttribute("errorMessage") : "" %>';
 
-        if (successMessage) {
+        if (successMessage && window.location.search.includes('fromSubmission=true')) {
             Swal.fire({
                 icon: 'success',
                 title: 'Success',
@@ -88,7 +66,7 @@
             });
         }
 
-        if (errorMessage) {
+        if (errorMessage && window.location.search.includes('fromSubmission=true')) {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',

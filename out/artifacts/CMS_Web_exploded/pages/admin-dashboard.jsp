@@ -6,7 +6,10 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<%@ page import="lk.ijse.aad.cms.dto.ComplaintDTO" %>
+<%@ page import="java.util.ArrayList" %>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,7 +45,7 @@
     </div>
 
     <div class="dashboard-actions">
-        <button type="button" class="btn btn-custom text-white btn-lg" data-bs-toggle="modal" data-bs-target="#viewAllComplaintsModal">
+        <button type="button" class="btn btn-custom text-white btn-lg" data-bs-toggle="modal" data-bs-target="#viewAllComplaintsModal" >
             View All Complaints
         </button>
     </div>
@@ -57,6 +60,8 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+
+                <!-- All Complaints Table -->
                 <div class="table-responsive">
                     <table class="table complaint-table">
                         <thead>
@@ -73,30 +78,43 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <c:forEach items="${allComplaints}" var="complaint">
-                            <tr>
-                                <td>${complaint.id}</td>
-                                <td>${complaint.title}</td>
-                                <td>${complaint.description}</td>
-                                <td>${complaint.userId}</td> <%-- Ideally show user name instead of ID --%>
-                                <td>${complaint.createdAt}</td>
-                                <td>
-                                    <span class="status-badge ${complaint.status == 'PENDING' ? 'status-pending' : 'status-resolved'}">
-                                            ${complaint.status}
-                                    </span>
-                                </td>
-                                <td>${complaint.remarks}</td>
-                                <td>${complaint.updatedAt}</td>
-                                <td>
-                                    <button class="btn btn-sm btn-outline-primary update-btn"
-                                            data-complaint-id="${complaint.id}"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#updateComplaintModal">Update</button>
-                                    <button class="btn btn-sm btn-outline-danger delete-btn"
-                                            data-complaint-id="${complaint.id}">Delete</button>
-                                </td>
-                            </tr>
-                        </c:forEach>
+                        <%
+                            ArrayList<ComplaintDTO> complaintDTOS = (ArrayList<ComplaintDTO>) request.getAttribute("allComplaints");
+                            if (complaintDTOS == null || complaintDTOS.isEmpty()) {
+                        %>
+                        <tr>
+                            <td colspan="9" class="text-center text-white">No complaints found.</td>
+                        </tr>
+                        <%
+                        } else {
+                            for (ComplaintDTO complaintDTO : complaintDTOS) {
+                        %>
+                        <tr>
+                            <td><%= complaintDTO.getId() %></td>
+                            <td><%= complaintDTO.getTitle() %></td>
+                            <td><%= complaintDTO.getDescription() %></td>
+                            <td><%= complaintDTO.getUserName() %></td>
+                            <td><%= complaintDTO.getCreatedAt() %></td>
+                            <td>
+                                <span class="status-badge <%= complaintDTO.getStatus().toLowerCase().replace("_", "-") %>">
+                                    <%= complaintDTO.getStatus() %>
+                                </span>
+                            </td>
+                            <td><%= complaintDTO.getRemarks() != null ? complaintDTO.getRemarks() : "N/A" %></td>
+                            <td><%= complaintDTO.getUpdatedAt() %></td>
+                            <td>
+                                <button class="btn btn-sm btn-secondary update-btn"
+                                        data-complaint-id="<%= complaintDTO.getId() %>"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#updateComplaintModal">Update</button>
+                                <button class="btn btn-sm btn-danger delete-btn"
+                                        data-complaint-id="<%= complaintDTO.getId() %>">Delete</button>
+                            </td>
+                        </tr>
+                        <%
+                                }
+                            }
+                        %>
                         </tbody>
                     </table>
                 </div>
@@ -147,6 +165,59 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous">
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get all update buttons
+        const updateButtons = document.querySelectorAll('.update-btn');
+
+        updateButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                // Get the complaint ID from the data attribute
+                const complaintId = this.getAttribute('data-complaint-id');
+                // Set the complaint ID in the modal's hidden input field
+                document.getElementById('update-complaint-id').value = complaintId;
+            });
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle success/error messages
+        const successMessage = '<%= session.getAttribute("successMessage") != null ? session.getAttribute("successMessage") : "" %>';
+        const errorMessage = '<%= session.getAttribute("errorMessage") != null ? session.getAttribute("errorMessage") : "" %>';
+
+        if (successMessage && window.location.search.includes('fromSubmission=true')) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: successMessage,
+                confirmButtonColor: '#764ba2',
+            }).then(() => {
+                window.location.href = '${pageContext.request.contextPath}/pages/admin-dashboard.jsp';
+            });
+        }
+
+        if (errorMessage && window.location.search.includes('fromSubmission=true')) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: errorMessage,
+                confirmButtonColor: '#764ba2',
+            }).then(() => {
+                window.location.href = '${pageContext.request.contextPath}/pages/admin-dashboard.jsp';
+            });
+        }
+    });
+</script>
+
+<%
+    // Clear session messages after they are used in JavaScript
+    session.removeAttribute("successMessage");
+    session.removeAttribute("errorMessage");
+%>
 
 </body>
 </html>

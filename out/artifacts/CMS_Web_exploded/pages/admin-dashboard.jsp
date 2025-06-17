@@ -113,9 +113,6 @@
                                     <button type="submit" class="btn btn-sm btn-danger"
                                             onclick="return confirm('Are you sure you want to delete this complaint?');">Delete</button>
                                 </form>
-
-<%--                                <button class="btn btn-sm btn-danger delete-btn"--%>
-<%--                                        data-complaint-id="<%= complaintDTO.getId() %>">Delete</button>--%>
                             </td>
                         </tr>
                         <%

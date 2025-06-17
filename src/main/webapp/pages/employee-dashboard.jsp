@@ -184,11 +184,69 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
+        // Handle edit button clicks
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const id = this.getAttribute('data-complaint-id');
+                const title = this.getAttribute('data-complaint-title');
+                const description = this.getAttribute('data-complaint-description');
+                document.getElementById('edit-complaint-id').value = id;
+                document.getElementById('edit-title').value = title;
+                document.getElementById('edit-description').value = description;
+            });
+        });
+
+        // Handle delete button clicks
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const complaintId = this.getAttribute('data-complaint-id');
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#764ba2',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Send POST request to delete servlet
+                        fetch('${pageContext.request.contextPath}/delete-employee-complaint', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: 'complaintId=' + encodeURIComponent(complaintId)
+                        }).then(response => {
+                            if (response.ok) {
+                                window.location.href = '${pageContext.request.contextPath}/complaint?fromSubmission=true';
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Failed to delete complaint.',
+                                    confirmButtonColor: '#764ba2',
+                                });
+                            }
+                        }).catch(error => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'An error occurred while deleting the complaint.',
+                                confirmButtonColor: '#764ba2',
+                            });
+                        });
+                    }
+                });
+            });
+        });
+
+        // Handle success/error messages
         const successMessage = '<%= session.getAttribute("successMessage") != null ? session.getAttribute("successMessage") : "" %>';
         const errorMessage = '<%= session.getAttribute("errorMessage") != null ? session.getAttribute("errorMessage") : "" %>';
 
-        // Only show SweetAlert and redirect if the page was loaded from a form submission
         if (successMessage && window.location.search.includes('fromSubmission=true')) {
             Swal.fire({
                 icon: 'success',
@@ -196,7 +254,6 @@
                 text: successMessage,
                 confirmButtonColor: '#764ba2',
             }).then(() => {
-                // Redirect to clean URL to avoid re-triggering
                 window.location.href = '${pageContext.request.contextPath}/complaint';
             });
         }
@@ -208,7 +265,6 @@
                 text: errorMessage,
                 confirmButtonColor: '#764ba2',
             }).then(() => {
-                // Redirect to clean URL to avoid re-triggering
                 window.location.href = '${pageContext.request.contextPath}/complaint';
             });
         }

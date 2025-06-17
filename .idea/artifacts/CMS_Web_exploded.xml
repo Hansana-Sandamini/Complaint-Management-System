@@ -28,6 +28,7 @@
       <element id="javaee-facet-resources" facet="CMS/web/Web5" />
       <element id="artifact" artifact-name="CMS:war" />
       <element id="javaee-facet-resources" facet="CMS/web/Web6" />
+      <element id="javaee-facet-resources" facet="CMS/web/Web7" />
     </root>
   </artifact>
 </component>

@@ -98,4 +98,16 @@ public class UserModel {
         return employees;
     }
 
+    public int getEmployeeCount() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM user WHERE role = 'EMPLOYEE'";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
+        }
+    }
+
 }

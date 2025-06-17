@@ -42,7 +42,42 @@
 <div class="container mt-5 hero-section">
     <div class="text-center mb-4">
         <h2 class="display-4 fw-bold mb-4">Admin Dashboard</h2>
-        <p class="text-white lead mb-4">Manage all complaints in the system</p>
+        <p class="text-white fw-bold lead mb-4">Manage all complaints in the system</p>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-dark text-white">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total Employees</h5>
+                    <p class="card-text"><%=(Integer) request.getAttribute("totalEmployees") != null ? request.getAttribute("totalEmployees") : 0 %></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-dark text-white">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total Complaints</h5>
+                    <p class="card-text"><%=(Integer) request.getAttribute("totalComplaints") != null ? request.getAttribute("totalComplaints") : 0 %></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-dark text-white">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Resolved Complaints</h5>
+                    <p class="card-text"><%=(Integer) request.getAttribute("resolvedComplaints") != null ? request.getAttribute("resolvedComplaints") : 0 %></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-dark text-white">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Pending Complaints</h5>
+                    <p class="card-text"><%=(Integer) request.getAttribute("pendingComplaints") != null ? request.getAttribute("pendingComplaints") : 0 %></p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="dashboard-actions">
@@ -115,8 +150,7 @@
 
                                 <form action="${pageContext.request.contextPath}/delete-complaint" method="post" style="display:inline;">
                                     <input type="hidden" name="id" value="<%= complaintDTO.getId() %>">
-                                    <button type="submit" class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Are you sure you want to delete this complaint?');">Delete</button>
+                                    <button type="submit" class="btn btn-sm btn-danger delete-btn">Delete</button>
                                 </form>
                             </td>
                         </tr>
@@ -246,11 +280,53 @@
                 document.getElementById('update-complaint-id').value = complaintId;
             });
         });
-    });
-</script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
+        // Handle delete button clicks
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const complaintId = this.getAttribute('data-complaint-id');
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#764ba2',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Send POST request to delete servlet
+                        fetch('${pageContext.request.contextPath}/delete-complaint', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: 'complaintId=' + encodeURIComponent(complaintId)
+                        }).then(response => {
+                            if (response.ok) {
+                                window.location.href = '${pageContext.request.contextPath}/complaint?fromSubmission=true';
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Failed to delete complaint.',
+                                    confirmButtonColor: '#764ba2',
+                                });
+                            }
+                        }).catch(error => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'An error occurred while deleting the complaint.',
+                                confirmButtonColor: '#764ba2',
+                            });
+                        });
+                    }
+                });
+            });
+        });
+
         // Handle success/error messages
         const successMessage = '<%= session.getAttribute("successMessage") != null ? session.getAttribute("successMessage") : "" %>';
         const errorMessage = '<%= session.getAttribute("errorMessage") != null ? session.getAttribute("errorMessage") : "" %>';

@@ -150,4 +150,82 @@ public class ComplaintModel {
         }
     }
 
+    public int getTotalComplaintCount() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM complaint";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
+        }
+    }
+
+    public int getResolvedComplaintCount() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM complaint WHERE status = 'RESOLVED'";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
+        }
+    }
+
+    public int getPendingComplaintCount() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM complaint WHERE status = 'PENDING'";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
+        }
+    }
+
+    public int getTotalComplaintCountByUserId(int userId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM complaint WHERE user_id = ?";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+                return 0;
+            }
+        }
+    }
+
+    public int getResolvedComplaintCountByUserId(int userId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM complaint WHERE user_id = ? AND status = 'RESOLVED'";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+                return 0;
+            }
+        }
+    }
+
+    public int getPendingComplaintCountByUserId(int userId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM complaint WHERE user_id = ? AND status = 'PENDING'";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+                return 0;
+            }
+        }
+    }
+
 }

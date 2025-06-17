@@ -44,6 +44,33 @@
         <p class="text-white lead mb-4">Manage your complaints and submissions</p>
     </div>
 
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card bg-dark text-white">
+                <div class="card-body text-center">
+                    <h5 class="card-title">My Complaints</h5>
+                    <p class="card-text"><%=(Integer) request.getAttribute("myComplaints") != null ? request.getAttribute("myComplaints") : 0 %></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-dark text-white">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Resolved Complaints</h5>
+                    <p class="card-text"><%=(Integer) request.getAttribute("myResolvedComplaints") != null ? request.getAttribute("myResolvedComplaints") : 0 %></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-dark text-white">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Pending Complaints</h5>
+                    <p class="card-text"><%=(Integer) request.getAttribute("myPendingComplaints") != null ? request.getAttribute("myPendingComplaints") : 0 %></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="dashboard-actions">
         <button type="button" class="btn btn-custom text-white btn-lg" data-bs-toggle="modal" data-bs-target="#newComplaintModal">
             New Complaint

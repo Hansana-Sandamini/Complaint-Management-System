@@ -50,12 +50,23 @@ public class ComplaintManagementServlet extends HttpServlet {
                 ArrayList<UserDTO> employees = userModel.getAllEmployees();
                 request.setAttribute("allEmployees", employees);
 
+                // Set counts for admin dashboard
+                request.setAttribute("totalEmployees", userModel.getEmployeeCount());
+                request.setAttribute("totalComplaints", complaintModel.getTotalComplaintCount());
+                request.setAttribute("resolvedComplaints", complaintModel.getResolvedComplaintCount());
+                request.setAttribute("pendingComplaints", complaintModel.getPendingComplaintCount());
+
                 request.getRequestDispatcher("/pages/admin-dashboard.jsp").forward(request, response);
 
             } else if ("EMPLOYEE".equals(user.getRole())){
                 // Load own submitted Complaints
                 complaints = complaintModel.getComplaintsByUserId(user.getId());
                 request.setAttribute("allComplaints", complaints);
+
+                // Set counts for employee dashboard
+                request.setAttribute("myComplaints", complaintModel.getTotalComplaintCountByUserId(user.getId()));
+                request.setAttribute("myResolvedComplaints", complaintModel.getResolvedComplaintCountByUserId(user.getId()));
+                request.setAttribute("myPendingComplaints", complaintModel.getPendingComplaintCountByUserId(user.getId()));
 
                 request.getRequestDispatcher("/pages/employee-dashboard.jsp").forward(request, response);
             }

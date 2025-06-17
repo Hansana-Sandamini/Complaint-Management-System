@@ -20,6 +20,7 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
           crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
@@ -42,39 +43,43 @@
 <div class="container mt-5 hero-section">
     <div class="text-center mb-4">
         <h2 class="display-4 fw-bold mb-4">Admin Dashboard</h2>
-        <p class="text-white fw-bold lead mb-4">Manage all complaints in the system</p>
+        <p class="text-white lead mb-4">Manage all complaints in the system</p>
     </div>
 
     <div class="row mb-4">
-        <div class="col-md-3">
+        <div class="col-md-3 mb-3">
             <div class="card bg-dark text-white">
                 <div class="card-body text-center">
+                    <i class="fas fa-users fa-3x mb-3" style="color: #4e73df;"></i>
                     <h5 class="card-title">Total Employees</h5>
-                    <p class="card-text"><%=(Integer) request.getAttribute("totalEmployees") != null ? request.getAttribute("totalEmployees") : 0 %></p>
+                    <p class="card-text display-5"><%= request.getAttribute("totalEmployees") != null ? request.getAttribute("totalEmployees") : 0 %></p>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 mb-3">
             <div class="card bg-dark text-white">
                 <div class="card-body text-center">
+                    <i class="fas fa-clipboard-list fa-3x mb-3" style="color: #1cc88a;"></i>
                     <h5 class="card-title">Total Complaints</h5>
-                    <p class="card-text"><%=(Integer) request.getAttribute("totalComplaints") != null ? request.getAttribute("totalComplaints") : 0 %></p>
+                    <p class="card-text display-5"><%= request.getAttribute("totalComplaints") != null ? request.getAttribute("totalComplaints") : 0 %></p>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 mb-3">
             <div class="card bg-dark text-white">
                 <div class="card-body text-center">
+                    <i class="fas fa-check-circle fa-3x mb-3" style="color: #36b9cc;"></i>
                     <h5 class="card-title">Resolved Complaints</h5>
-                    <p class="card-text"><%=(Integer) request.getAttribute("resolvedComplaints") != null ? request.getAttribute("resolvedComplaints") : 0 %></p>
+                    <p class="card-text display-5"><%= request.getAttribute("resolvedComplaints") != null ? request.getAttribute("resolvedComplaints") : 0 %></p>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 mb-3">
             <div class="card bg-dark text-white">
                 <div class="card-body text-center">
+                    <i class="fas fa-hourglass-half fa-3x mb-3" style="color: #f6c23e;"></i>
                     <h5 class="card-title">Pending Complaints</h5>
-                    <p class="card-text"><%=(Integer) request.getAttribute("pendingComplaints") != null ? request.getAttribute("pendingComplaints") : 0 %></p>
+                    <p class="card-text display-5"><%= request.getAttribute("pendingComplaints") != null ? request.getAttribute("pendingComplaints") : 0 %></p>
                 </div>
             </div>
         </div>

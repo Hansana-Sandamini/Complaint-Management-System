@@ -19,6 +19,7 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
           crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
@@ -30,7 +31,7 @@
         <div class="d-flex">
             <a href="${pageContext.request.contextPath}/pages/profile.jsp"
                class="btn btn-custom text-white" style="margin-right: 10px">My Profile</a>
-            <form action="${pageContext.request.contextPath}/index.jsp" method="post">
+            <form action="${pageContext.request.contextPath}/logout" method="post" class="m-0">
                 <button type="submit" class="btn btn-custom text-white">Logout</button>
             </form>
         </div>
@@ -44,26 +45,29 @@
         <p class="text-white lead mb-4">Manage your complaints and submissions</p>
     </div>
 
-    <div class="row mb-4">
+    <div class="row mb-4 mb-4">
         <div class="col-md-4">
             <div class="card bg-dark text-white">
                 <div class="card-body text-center">
+                    <i class="fas fa-clipboard-list fa-3x mb-3" style="color: #1cc88a;"></i>
                     <h5 class="card-title">My Complaints</h5>
                     <p class="card-text"><%=(Integer) request.getAttribute("myComplaints") != null ? request.getAttribute("myComplaints") : 0 %></p>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 mb-4">
             <div class="card bg-dark text-white">
                 <div class="card-body text-center">
+                    <i class="fas fa-check-circle fa-3x mb-3" style="color: #36b9cc;"></i>
                     <h5 class="card-title">Resolved Complaints</h5>
                     <p class="card-text"><%=(Integer) request.getAttribute("myResolvedComplaints") != null ? request.getAttribute("myResolvedComplaints") : 0 %></p>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 mb-4">
             <div class="card bg-dark text-white">
                 <div class="card-body text-center">
+                    <i class="fas fa-hourglass-half fa-3x mb-3" style="color: #f6c23e;"></i>
                     <h5 class="card-title">Pending Complaints</h5>
                     <p class="card-text"><%=(Integer) request.getAttribute("myPendingComplaints") != null ? request.getAttribute("myPendingComplaints") : 0 %></p>
                 </div>

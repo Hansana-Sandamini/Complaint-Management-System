@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="lk.ijse.aad.cms.dto.ComplaintDTO" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="lk.ijse.aad.cms.dto.UserDTO" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -47,6 +48,10 @@
     <div class="dashboard-actions">
         <button type="button" class="btn btn-custom text-white btn-lg" data-bs-toggle="modal" data-bs-target="#viewAllComplaintsModal" >
             View All Complaints
+        </button>
+
+        <button type="button" class="btn btn-custom text-white btn-lg" data-bs-toggle="modal" data-bs-target="#viewAllEmployeesModal">
+            View All Employees
         </button>
     </div>
 </div>
@@ -153,6 +158,63 @@
                         <button type="submit" class="btn btn-custom text-white btn-lg">Update Status</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- View All Employees Modal -->
+<div class="modal fade" id="viewAllEmployeesModal" tabindex="-1" aria-labelledby="viewAllEmployeesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewAllEmployeesModalLabel">All Employees</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table complaint-table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Mobile</th>
+                            <th>Image</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <%
+                            ArrayList<UserDTO> employeeList = (ArrayList<UserDTO>) request.getAttribute("allEmployees");
+                            if (employeeList == null || employeeList.isEmpty()) {
+                        %>
+                        <tr>
+                            <td colspan="5" class="text-center text-white">No employees found.</td>
+                        </tr>
+                        <%
+                        } else {
+                            for (UserDTO employee : employeeList) {
+                        %>
+                        <tr>
+                            <td><%= employee.getId() %></td>
+                            <td><%= employee.getName() %></td>
+                            <td><%= employee.getEmail() %></td>
+                            <td><%= employee.getMobile() != null ? employee.getMobile() : "N/A" %></td>
+                            <td>
+                                <% if (employee.getImage() != null && !employee.getImage().isEmpty()) { %>
+                                <img src="${pageContext.request.contextPath}/uploads/<%= employee.getImage() %>" alt="Employee Image" class="img-thumbnail" style="max-width: 100px; max-height: 100px;">
+                                <% } else { %>
+                                No Image
+                                <% } %>
+                            </td>
+                        </tr>
+                        <%
+                                }
+                            }
+                        %>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

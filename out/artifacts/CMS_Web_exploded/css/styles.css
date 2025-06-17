@@ -18,3 +18,9 @@ footer {
     margin-top: auto;
     padding: 1.5rem 0;
 }
+
+.complaint-table img.img-thumbnail {
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: cover;
+}

@@ -185,7 +185,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Handle edit button clicks (existing code remains unchanged)
+        // Handle edit button clicks
         document.querySelectorAll('.edit-btn').forEach(button => {
             button.addEventListener('click', function () {
                 const id = this.getAttribute('data-complaint-id');
@@ -243,7 +243,7 @@
             });
         });
 
-        // Handle success/error messages (existing code remains unchanged)
+        // Handle success/error messages
         const successMessage = '<%= session.getAttribute("successMessage") != null ? session.getAttribute("successMessage") : "" %>';
         const errorMessage = '<%= session.getAttribute("errorMessage") != null ? session.getAttribute("errorMessage") : "" %>';
 

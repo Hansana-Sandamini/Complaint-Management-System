@@ -83,3 +83,36 @@ body::before {
     font-weight: bold;
     color: #ffcc00;
 }
+
+.offcanvas-profile {
+    width: 400px !important;
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+}
+
+.offcanvas-profile .profile-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.offcanvas-profile .profile-icon {
+    font-size: 150px;
+    color: #ffffff;
+    margin-bottom: 1rem;
+    display: block;
+    text-align: center;
+}
+
+.offcanvas-profile .profile-details {
+    text-align: center;
+}
+
+.offcanvas-profile .btn-close {
+    filter: invert(1);
+}

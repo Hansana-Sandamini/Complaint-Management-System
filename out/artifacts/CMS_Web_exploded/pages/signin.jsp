@@ -75,29 +75,32 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Check for success or error messages in session
-        <c:if test="${not empty errorMessage}">
-        console.log('Error message found: ${errorMessage}');
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: '${errorMessage}',
-            confirmButtonText: 'OK',
-            confirmButtonColor: '#764ba2'
-        });
-        <% session.removeAttribute("errorMessage"); %>
-        </c:if>
+        const errorMessage = '<%= session.getAttribute("errorMessage") != null ? session.getAttribute("errorMessage") : "" %>';
+        const successMessage = '<%= session.getAttribute("successMessage") != null ? session.getAttribute("successMessage") : "" %>';
 
-        <c:if test="${not empty successMessage}">
-        console.log('Success message found: ${successMessage}');
-        Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: '${successMessage}',
-            showConfirmButton: false,
-            timer: 1500
-        });
-        <% session.removeAttribute("successMessage"); %>
-        </c:if>
+        if (errorMessage) {
+            console.log('Error message found: ' + errorMessage);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: errorMessage,
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#764ba2'
+            });
+            <% session.removeAttribute("errorMessage"); %>
+        }
+
+        if (successMessage) {
+            console.log('Success message found: ' + successMessage);
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: successMessage,
+                showConfirmButton: false,
+                timer: 1500
+            });
+            <% session.removeAttribute("successMessage"); %>
+        }
     });
 </script>
 

@@ -46,16 +46,16 @@ public class UpdateComplaintStatusServlet extends HttpServlet {
             complaint.setRemarks(remarks);
 
             if (complaintModel.updateComplaintStatus(complaint)) {
-                request.setAttribute("successMessage", "Complaint updated successfully...!");
+                session.setAttribute("successMessage", "Complaint updated successfully...!");
             } else {
-                request.setAttribute("errorMessage", "Failed to update complaint...");
+                session.setAttribute("errorMessage", "Failed to update complaint...");
             }
 
             // Redirect to complaint management servlet
             response.sendRedirect(request.getContextPath() + "/complaint?fromSubmission=true");
 
         } catch (SQLException e) {
-            request.setAttribute("errorMessage", "Database error: " + e.getMessage());
+            session.setAttribute("errorMessage", "Database error: " + e.getMessage());
             e.printStackTrace();
         }
     }

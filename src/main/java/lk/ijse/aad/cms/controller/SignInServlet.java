@@ -22,6 +22,8 @@ public class SignInServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(true);
+
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
@@ -31,29 +33,24 @@ public class SignInServlet extends HttpServlet {
         try {
             UserDTO user = userModel.authenticateUser(email, password);
             if (user != null) {
-                // Create session and store user
-                HttpSession session = request.getSession();
                 session.setAttribute("user", user);
 
                 // Set success message
-                request.getSession().setAttribute("successMessage", "Sign in successful! Moving to Dashboard...");
+                session.setAttribute("successMessage", "Sign in successful! Moving to Dashboard...");
 
                 // Redirect based on role
-                if ("ADMIN".equals(user.getRole())) {
-                    response.sendRedirect(request.getContextPath() + "/complaint"); // forward to admin logic
-//                    response.sendRedirect(request.getContextPath() + "/pages/admin-dashboard.jsp");
-                } else if ("EMPLOYEE".equals(user.getRole())){
-                    response.sendRedirect(request.getContextPath() + "/complaint"); // forward to admin logic
-//                    response.sendRedirect(request.getContextPath() + "/pages/employee-dashboard.jsp");
+                if ("ADMIN".equals(user.getRole()) || "EMPLOYEE".equals(user.getRole())) {
+                    response.sendRedirect(request.getContextPath() + "/complaint?fromSignIn=true");
                 }
+
             } else {
                 // Set error message
-                request.getSession().setAttribute("errorMessage", "Invalid email or password");
+                session.setAttribute("errorMessage", "Invalid email or password");
                 response.sendRedirect(request.getContextPath() + "/pages/signin.jsp");
             }
         } catch (SQLException e) {
             // Set error message for database error
-            request.getSession().setAttribute("errorMessage", "Database error: " + e.getMessage());
+            session.setAttribute("errorMessage", "Database error: " + e.getMessage());
             response.sendRedirect(request.getContextPath() + "/pages/signin.jsp");
         }
     }

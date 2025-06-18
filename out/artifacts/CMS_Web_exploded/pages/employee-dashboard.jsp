@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="lk.ijse.aad.cms.dto.ComplaintDTO" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="lk.ijse.aad.cms.dto.UserDTO" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,8 +30,8 @@
     <div class="container">
         <a class="navbar-brand fw-bold fs-3">CMS</a>
         <div class="d-flex">
-            <a href="${pageContext.request.contextPath}/pages/profile.jsp"
-               class="btn btn-custom text-white" style="margin-right: 10px">My Profile</a>
+            <a href="#" class="btn btn-custom text-white me-2" data-bs-toggle="offcanvas"
+               data-bs-target="#profileOffcanvas" aria-controls="profileOffcanvas">My Profile</a>
             <form action="${pageContext.request.contextPath}/logout" method="post" class="m-0">
                 <button type="submit" class="btn btn-custom text-white">Logout</button>
             </form>
@@ -83,6 +84,24 @@
         <button type="button" class="btn btn-custom text-white btn-lg" data-bs-toggle="modal" data-bs-target="#viewComplaintsModal">
             View My Complaints
         </button>
+    </div>
+</div>
+
+<!-- Profile Section -->
+<div class="offcanvas offcanvas-end offcanvas-profile" tabindex="-1" id="profileOffcanvas" aria-labelledby="profileOffcanvasLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="profileOffcanvasLabel">My Profile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="profile-details">
+            <i id="profile-icon" class="fas fa-user-circle profile-icon"></i>
+            <h4 id="profile-name"></h4>
+            <p><strong>ID:</strong> <span id="profile-id"></span></p>
+            <p><strong>Email:</strong> <span id="profile-email"></span></p>
+            <p><strong>Mobile:</strong> <span id="profile-mobile"></span></p>
+            <p><strong>Role:</strong> <span id="profile-role"></span></p>
+        </div>
     </div>
 </div>
 
@@ -273,6 +292,33 @@
                 });
             });
         });
+
+        // Profile details
+        const profileLink = document.querySelector('[data-bs-toggle="offcanvas"]');
+        if (profileLink) {
+            profileLink.addEventListener('click', function () {
+                <% UserDTO user = (UserDTO) session.getAttribute("user"); if (user != null) { %>
+                document.getElementById('profile-id').textContent = '<%= user.getId() %>';
+                document.getElementById('profile-name').textContent = '<%= user.getName() != null ? user.getName() : "N/A" %>';
+                document.getElementById('profile-email').textContent = '<%= user.getEmail() != null ? user.getEmail() : "N/A" %>';
+                document.getElementById('profile-mobile').textContent = '<%= user.getMobile() != null ? user.getMobile() : "N/A" %>';
+                document.getElementById('profile-role').textContent = '<%= user.getRole() != null ? user.getRole() : "N/A" %>';
+                const imageContainer = document.getElementById('profile-image-container');
+                <% if (user.getImage() != null && !user.getImage().isEmpty()) { %>
+                imageContainer.innerHTML = '<img src="<%= request.getContextPath() %>/Uploads/<%= user.getImage() %>" alt="Profile Image" class="profile-img">';
+                <% } else { %>
+                imageContainer.innerHTML = '<i class="fas fa-user-circle profile-icon"></i>';
+                <% } %>
+                <% } else { %>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'User data not found. Please log in again.',
+                    confirmButtonColor: '#764ba2'
+                });
+                <% } %>
+            });
+        }
 
         // Handle success/error messages
         const successMessage = '<%= session.getAttribute("successMessage") != null ? session.getAttribute("successMessage") : "" %>';

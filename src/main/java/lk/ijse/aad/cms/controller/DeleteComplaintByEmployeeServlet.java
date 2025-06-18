@@ -6,6 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lk.ijse.aad.cms.dto.ComplaintDTO;
 import lk.ijse.aad.cms.model.ComplaintModel;
 
@@ -21,6 +22,8 @@ public class DeleteComplaintByEmployeeServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+
         // Get complaint ID from request
         String complaintIdStr = request.getParameter("complaintId");
         int complaintId;
@@ -28,7 +31,7 @@ public class DeleteComplaintByEmployeeServlet extends HttpServlet {
         try {
             complaintId = Integer.parseInt(complaintIdStr);
         } catch (NumberFormatException e) {
-            request.getSession().setAttribute("errorMessage", "Invalid complaint ID...");
+            session.setAttribute("errorMessage", "Invalid complaint ID...");
             response.sendRedirect(request.getContextPath() + "/complaint?fromSubmission=true");
             return;
         }
@@ -40,21 +43,21 @@ public class DeleteComplaintByEmployeeServlet extends HttpServlet {
             // Check if complaint exists and is in PENDING status
             ComplaintDTO complaint = complaintModel.getComplaintById(complaintId);
             if (complaint == null) {
-                request.getSession().setAttribute("errorMessage", "Complaint not found...");
+                session.setAttribute("errorMessage", "Complaint not found...");
             } else if (!"PENDING".equals(complaint.getStatus())) {
-                request.getSession().setAttribute("errorMessage", "Only pending complaints can be deleted...");
+                session.setAttribute("errorMessage", "Only pending complaints can be deleted...");
             } else {
                 // Delete the complaint
                 boolean isDeleted = complaintModel.deleteComplaint(complaintId);
                 if (isDeleted) {
-                    request.getSession().setAttribute("successMessage", "Complaint deleted successfully...!");
+                    session.setAttribute("successMessage", "Complaint deleted successfully...!");
                 } else {
-                    request.getSession().setAttribute("errorMessage", "Failed to delete complaint...");
+                    session.setAttribute("errorMessage", "Failed to delete complaint...");
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            request.getSession().setAttribute("errorMessage", "Database error occurred while deleting complaint...");
+            session.setAttribute("errorMessage", "Database error occurred while deleting complaint...");
         }
 
         // Redirect back to the dashboard

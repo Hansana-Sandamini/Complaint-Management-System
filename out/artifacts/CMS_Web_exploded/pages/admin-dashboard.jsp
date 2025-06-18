@@ -30,8 +30,8 @@
     <div class="container">
         <a class="navbar-brand fw-bold fs-3">CMS</a>
         <div class="d-flex">
-            <a href="${pageContext.request.contextPath}/pages/profile.jsp"
-               class="btn btn-custom text-white me-2">My Profile</a>
+            <a href="#" class="btn btn-custom text-white me-2" data-bs-toggle="offcanvas"
+               data-bs-target="#profileOffcanvas" aria-controls="profileOffcanvas">My Profile</a>
             <form action="${pageContext.request.contextPath}/logout" method="post" class="m-0">
                 <button type="submit" class="btn btn-custom text-white">Logout</button>
             </form>
@@ -96,6 +96,24 @@
     </div>
 </div>
 
+<!-- Profile Section -->
+<div class="offcanvas offcanvas-end offcanvas-profile" tabindex="-1" id="profileOffcanvas" aria-labelledby="profileOffcanvasLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="profileOffcanvasLabel">My Profile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="profile-details">
+            <i id="profile-icon" class="fas fa-user-circle profile-icon"></i>
+            <h4 id="profile-name"></h4>
+            <p><strong>ID:</strong> <span id="profile-id"></span></p>
+            <p><strong>Email:</strong> <span id="profile-email"></span></p>
+            <p><strong>Mobile:</strong> <span id="profile-mobile"></span></p>
+            <p><strong>Role:</strong> <span id="profile-role"></span></p>
+        </div>
+    </div>
+</div>
+
 <!-- View All Complaints Modal -->
 <div class="modal fade" id="viewAllComplaintsModal" tabindex="-1" aria-labelledby="viewAllComplaintsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
@@ -155,7 +173,7 @@
 
                                 <form action="${pageContext.request.contextPath}/delete-complaint" method="post" style="display:inline;">
                                     <input type="hidden" name="id" value="<%= complaintDTO.getId() %>">
-                                    <button type="submit" class="btn btn-sm btn-danger delete-btn">Delete</button>
+                                    <button type="button" class="btn btn-sm btn-danger delete-complaint-btn">Delete</button>
                                 </form>
                             </td>
                         </tr>
@@ -220,6 +238,7 @@
                             <th>Email</th>
                             <th>Mobile</th>
                             <th>Image</th>
+                            <th>Action</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -228,7 +247,7 @@
                             if (employeeList == null || employeeList.isEmpty()) {
                         %>
                         <tr>
-                            <td colspan="5" class="text-center text-white">No employees found.</td>
+                            <td colspan="6" class="text-center text-white">No employees found.</td>
                         </tr>
                         <%
                         } else {
@@ -241,10 +260,16 @@
                             <td><%= employee.getMobile() != null ? employee.getMobile() : "N/A" %></td>
                             <td>
                                 <% if (employee.getImage() != null && !employee.getImage().isEmpty()) { %>
-                                <img src="${pageContext.request.contextPath}/uploads/<%= employee.getImage() %>" alt="Employee Image" class="img-thumbnail" style="max-width: 100px; max-height: 100px;">
+                                <img src="${pageContext.request.contextPath}/Uploads/<%= employee.getImage() %>" alt="Employee Image" class="img-thumbnail" style="max-width: 100px; max-height: 100px;">
                                 <% } else { %>
-                                No Image
+                                <i class="fas fa-user-circle" style="font-size: 100px; color: #ffffff;"></i>
                                 <% } %>
+                            </td>
+                            <td>
+                                <form action="${pageContext.request.contextPath}/delete-employee" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="<%= employee.getId() %>">
+                                    <button type="submit" class="btn btn-sm btn-danger delete-employee-btn">Delete</button>
+                                </form>
                             </td>
                         </tr>
                         <%
@@ -286,14 +311,15 @@
             });
         });
 
-        // Handle delete button clicks
-        document.querySelectorAll('.delete-btn').forEach(button => {
-            button.addEventListener('click', function () {
-                const complaintId = this.getAttribute('data-complaint-id');
+        // Delete button for complaints
+        document.querySelectorAll('.delete-complaint-btn').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                const form = this.closest('form');
 
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
+                    text: "You won't be able to revert this complaint deletion!",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#764ba2',
@@ -301,36 +327,60 @@
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Send POST request to delete servlet
-                        fetch('${pageContext.request.contextPath}/delete-complaint', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded',
-                            },
-                            body: 'complaintId=' + encodeURIComponent(complaintId)
-                        }).then(response => {
-                            if (response.ok) {
-                                window.location.href = '${pageContext.request.contextPath}/complaint?fromSubmission=true';
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Error',
-                                    text: 'Failed to delete complaint.',
-                                    confirmButtonColor: '#764ba2',
-                                });
-                            }
-                        }).catch(error => {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: 'An error occurred while deleting the complaint.',
-                                confirmButtonColor: '#764ba2',
-                            });
-                        });
+                        form.submit();
                     }
                 });
             });
         });
+
+        // Delete button for employees
+        document.querySelectorAll('.delete-employee-btn').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                const form = this.closest('form');
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this employee deletion!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#764ba2',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+
+        // Profile details
+        const profileLink = document.querySelector('[data-bs-toggle="offcanvas"]');
+        if (profileLink) {
+            profileLink.addEventListener('click', function () {
+                <% UserDTO user = (UserDTO) session.getAttribute("user"); if (user != null) { %>
+                document.getElementById('profile-id').textContent = '<%= user.getId() %>';
+                document.getElementById('profile-name').textContent = '<%= user.getName() != null ? user.getName() : "N/A" %>';
+                document.getElementById('profile-email').textContent = '<%= user.getEmail() != null ? user.getEmail() : "N/A" %>';
+                document.getElementById('profile-mobile').textContent = '<%= user.getMobile() != null ? user.getMobile() : "N/A" %>';
+                document.getElementById('profile-role').textContent = '<%= user.getRole() != null ? user.getRole() : "N/A" %>';
+                const imageContainer = document.getElementById('profile-image-container');
+                <% if (user.getImage() != null && !user.getImage().isEmpty()) { %>
+                imageContainer.innerHTML = '<img src="<%= request.getContextPath() %>/Uploads/<%= user.getImage() %>" alt="Profile Image" class="profile-img">';
+                <% } else { %>
+                imageContainer.innerHTML = '<i class="fas fa-user-circle profile-icon"></i>';
+                <% } %>
+                <% } else { %>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'User data not found. Please log in again.',
+                    confirmButtonColor: '#764ba2'
+                });
+                <% } %>
+            });
+        }
 
         // Handle success/error messages
         const successMessage = '<%= session.getAttribute("successMessage") != null ? session.getAttribute("successMessage") : "" %>';

@@ -36,6 +36,17 @@ public class UserModel {
         }
     }
 
+    public boolean deleteUser(int userId) throws SQLException {
+        String sql = "DELETE FROM user WHERE id = ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement pstm = connection.prepareStatement(sql)) {
+
+            pstm.setInt(1, userId);
+            return pstm.executeUpdate() > 0;
+        }
+    }
+
     public UserDTO authenticateUser(String email, String password) throws SQLException {
         String sql = "SELECT * FROM user WHERE email = ? AND password = ?";
 

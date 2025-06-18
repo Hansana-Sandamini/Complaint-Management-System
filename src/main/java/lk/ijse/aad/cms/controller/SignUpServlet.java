@@ -4,10 +4,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
+import jakarta.servlet.http.*;
 import lk.ijse.aad.cms.dto.UserDTO;
 import lk.ijse.aad.cms.model.UserModel;
 
@@ -25,6 +22,8 @@ public class SignUpServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String mobile = request.getParameter("mobile");
@@ -38,14 +37,14 @@ public class SignUpServlet extends HttpServlet {
         try {
             // Check if email already exists
             if (userModel.isUserEmailExists(email)) {
-                request.getSession().setAttribute("errorMessage", "Email already exists. Please use a different email...");
+                session.setAttribute("errorMessage", "Email already exists. Please use a different email...");
                 response.sendRedirect(request.getContextPath() + "/pages/signup.jsp");
                 return;
             }
 
             // Validate mobile number length and digits
             if (mobile == null || !mobile.matches("^\\d{10}$")) {
-                request.getSession().setAttribute("errorMessage", "Mobile number must be exactly 10 digits...");
+                session.setAttribute("errorMessage", "Mobile number must be exactly 10 digits...");
                 response.sendRedirect(request.getContextPath() + "/pages/signup.jsp");
                 return;
             }
@@ -69,14 +68,14 @@ public class SignUpServlet extends HttpServlet {
             // Save user
             if (userModel.saveUser(userDTO)) {
                 // Forward to signup.jsp -> JavaScript shows SweetAlert
-                request.getSession().setAttribute("successMessage", "Registration successful! Please sign in...");
+                session.setAttribute("successMessage", "Registration successful! Please sign in...");
                 request.getRequestDispatcher("/pages/signup.jsp").forward(request, response);
             } else {
-                request.getSession().setAttribute("errorMessage", "Registration failed. Please try again...");
+                session.setAttribute("errorMessage", "Registration failed. Please try again...");
                 response.sendRedirect(request.getContextPath() + "/pages/signup.jsp");
             }
         } catch (SQLException e) {
-            request.getSession().setAttribute("errorMessage", "Database error: " + e.getMessage());
+            session.setAttribute("errorMessage", "Database error: " + e.getMessage());
             response.sendRedirect(request.getContextPath() + "/pages/signup.jsp");
         }
     }

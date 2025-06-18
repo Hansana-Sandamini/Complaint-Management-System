@@ -81,9 +81,6 @@ public class UpdateComplaintByEmployeeServlet extends HttpServlet {
                 session.setAttribute("errorMessage", "Failed to update complaint...");
             }
 
-            // Redirect to complaint management servlet
-//            resp.sendRedirect(req.getContextPath() + "/complaint?fromSubmission=true");
-
         } catch (SQLException e) {
             session.setAttribute("errorMessage", "Database error: " + e.getMessage());
             e.printStackTrace();

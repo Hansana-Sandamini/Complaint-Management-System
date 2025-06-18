@@ -234,6 +234,31 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const successMessage = '<%= session.getAttribute("successMessage") != null ? session.getAttribute("successMessage") : "" %>';
+        const errorMessage = '<%= session.getAttribute("errorMessage") != null ? session.getAttribute("errorMessage") : "" %>';
+
+        if (successMessage && (window.location.search.includes('fromSubmission=true') || window.location.search.includes('fromSignIn=true'))) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: successMessage,
+                confirmButtonColor: '#764ba2',
+            });
+        }
+
+        if (errorMessage && window.location.search.includes('fromSubmission=true')) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: errorMessage,
+                confirmButtonColor: '#764ba2',
+            });
+        }
+    });
+</script>
+
+<script>
     document.addEventListener('DOMContentLoaded', function () {
         // Handle edit button clicks
         document.querySelectorAll('.edit-btn').forEach(button => {
@@ -271,12 +296,19 @@
                             body: 'complaintId=' + encodeURIComponent(complaintId)
                         }).then(response => {
                             if (response.ok) {
-                                window.location.href = '${pageContext.request.contextPath}/complaint?fromSubmission=true';
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Success',
+                                    text: 'Complaint deleted successfully...!',
+                                    confirmButtonColor: '#764ba2',
+                                }).then(() => {
+                                    window.location.href = '${pageContext.request.contextPath}/complaint?fromSubmission=true&t=' + new Date().getTime();
+                                });
                             } else {
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Error',
-                                    text: 'Failed to delete complaint.',
+                                    text: 'Failed to delete complaint...',
                                     confirmButtonColor: '#764ba2',
                                 });
                             }

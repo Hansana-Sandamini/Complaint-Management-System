@@ -298,6 +298,31 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const successMessage = '<%= session.getAttribute("successMessage") != null ? session.getAttribute("successMessage") : "" %>';
+        const errorMessage = '<%= session.getAttribute("errorMessage") != null ? session.getAttribute("errorMessage") : "" %>';
+
+        if (successMessage && (window.location.search.includes('fromSubmission=true') || window.location.search.includes('fromSignIn=true'))) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: successMessage,
+                confirmButtonColor: '#764ba2',
+            });
+        }
+
+        if (errorMessage && window.location.search.includes('fromSubmission=true')) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: errorMessage,
+                confirmButtonColor: '#764ba2',
+            });
+        }
+    });
+</script>
+
+<script>
     document.addEventListener('DOMContentLoaded', function () {
         // Get all update buttons
         const updateButtons = document.querySelectorAll('.update-btn');

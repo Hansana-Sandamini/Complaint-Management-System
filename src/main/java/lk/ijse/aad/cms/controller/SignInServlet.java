@@ -35,11 +35,12 @@ public class SignInServlet extends HttpServlet {
             if (user != null) {
                 session.setAttribute("user", user);
 
-                // Set success message
-                session.setAttribute("successMessage", "Sign in successful! Moving to Dashboard...");
-
                 // Redirect based on role
                 if ("ADMIN".equals(user.getRole()) || "EMPLOYEE".equals(user.getRole())) {
+
+                    // Set success message
+                    session.setAttribute("successMessage", "Sign in successful! Moving to Dashboard...");
+
                     response.sendRedirect(request.getContextPath() + "/complaint?fromSignIn=true");
                 }
 

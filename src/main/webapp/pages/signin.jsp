@@ -73,33 +73,16 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Check for success or error messages in session
+    document.addEventListener('DOMContentLoaded', function() {
         const errorMessage = '<%= session.getAttribute("errorMessage") != null ? session.getAttribute("errorMessage") : "" %>';
-        const successMessage = '<%= session.getAttribute("successMessage") != null ? session.getAttribute("successMessage") : "" %>';
 
         if (errorMessage) {
-            console.log('Error message found: ' + errorMessage);
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
+                title: 'Login Failed',
                 text: errorMessage,
-                confirmButtonText: 'OK',
-                confirmButtonColor: '#764ba2'
+                confirmButtonColor: '#764ba2',
             });
-            <% session.removeAttribute("errorMessage"); %>
-        }
-
-        if (successMessage) {
-            console.log('Success message found: ' + successMessage);
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: successMessage,
-                showConfirmButton: false,
-                timer: 1500
-            });
-            <% session.removeAttribute("successMessage"); %>
         }
     });
 </script>

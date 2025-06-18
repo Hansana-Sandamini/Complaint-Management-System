@@ -55,8 +55,8 @@ public class SubmitComplaintServlet extends HttpServlet {
             // Set success message
             session.setAttribute("successMessage", "Complaint submitted successfully...!");
 
-            // Forward to employee dashboard
-            request.getRequestDispatcher("/pages/employee-dashboard.jsp").forward(request, response);
+            // Redirect to the complaint servlet, not directly to the JSP
+            response.sendRedirect(request.getContextPath() + "/complaint?fromSubmission=true");
 
         } catch (SQLException e) {
             session.setAttribute("errorMessage", "Database error: " + e.getMessage());

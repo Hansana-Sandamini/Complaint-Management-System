@@ -6,7 +6,12 @@ This project is a Web-Based Complaint Management System (CMS) developed as part 
 
 ---
 
-## Features
+## 🎥 Demo Video
+Check out the system in action on YouTube: https://www.youtube.com/watch?v=mId8LDF_RF8
+
+---
+
+## ✨ Features
 - **Authentication Module**: Login with session management and role-based access control.
 - **Complaint Management**:
   - **Employees**: Submit, view, edit, and delete unresolved complaints.
@@ -25,7 +30,7 @@ This project is a Web-Based Complaint Management System (CMS) developed as part 
 
 ---
 
-## System Architecture
+## 🚀 System Architecture
 - **MVC Pattern**:
   - **View**: JSP pages for UI rendering.
   - **Controller**: Servlets handling HTTP requests/responses.

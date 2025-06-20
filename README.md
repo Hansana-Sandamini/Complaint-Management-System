@@ -11,6 +11,14 @@ Check out the system in action on YouTube: https://www.youtube.com/watch?v=mId8L
 
 ---
 
+![Screenshot from 2025-06-20 22-18-13](https://github.com/user-attachments/assets/86ee633d-4fcc-47ac-8685-dda2ade67668)
+
+![Screenshot from 2025-06-20 22-25-18](https://github.com/user-attachments/assets/0ca5724f-c440-4a58-87e1-3b8acd5b1fa5)
+
+![Screenshot from 2025-06-20 22-23-05](https://github.com/user-attachments/assets/1225c828-2482-4880-9a02-8fc9f0ad2cdd)
+
+---
+
 ## ✨ Features
 - **Authentication Module**: Login with session management and role-based access control.
 - **Complaint Management**:
